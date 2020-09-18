@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .nav {
+            width: 100%;
+        }
+
+        .foucs .lt {
+            position: absolute;
+            left: 0;
+            top: 135px;
+            text-decoration: none;
+            font-size: 30px;
+            width: 20px;
+            height: 30px;
+            background-color: #ccc;
+            z-index: 11;
+        }
+
+        .nav .rt {
+            position: absolute;
+
+            top: 135px;
+            right: 0;
+            text-decoration: none;
+            font-size: 30px;
+            width: 20px;
+            height: 30px;
+            background-color: #ccc;
+            z-index: 11;
+        }
+
+        .foucs {
+            position: relative;
+            width: 500px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        ul {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            width: 500px;
+            height: 300px;
+            list-style: none;
+        }
+
+        ul li {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            font-size: 50px;
+            text-align: center;
+            line-height: 300px;
+            opacity: 0;
+            transition: all .5s;
+        }
+        .show {
+            z-index: 10;
+            opacity: 1;
+        }
+
+        ul li img {
+            width: 100%;
+            height: 100%;
+        }
+
+        ol {
+            position: absolute;
+            bottom: 20px;
+            right: 10px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            z-index: 14;
+        }
+
+        ol li {
+            float: left;
+            margin-left: 10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #333;
+        }
+
+        .current {
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <div class="foucs">
+            <a href="javascript:;" class="lt">&lt;</a>
+            <a href="javascript:;" class="rt">></a>
+            <ul>
+                <li class="show"><a href="javascript:;"><img src="1.jpg" alt=""></a></li>
+                <li><a href="javascript:;"><img src="2.jpg" alt=""></a></li>
+                <li><a href="javascript:;"><img src="3.jpg" alt=""></a></li>
+                <li><a href="javascript:;"><img src="4.jpg" alt=""></a></li>
+
+            </ul>
+            <ol>
+            </ol>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('load', function () {
+            var ul = document.querySelector('ul');
+            var li1 = ul.querySelectorAll('li');
+            var ol = document.querySelector('ol');
+            var rt = document.querySelector('.rt');
+            var lt = document.querySelector('.lt');
+            var index = 0;
+            //创建ol
+            for (var i = 0; i < ul.children.length; i++) {
+                //创建li
+                var li2 = document.createElement('li');
+                //使用setattribute创建index属性；
+                li2.setAttribute('index', i);
+                //将li添加给ol
+                ol.appendChild(li2);
+                //li的点击事件
+                li2.addEventListener('click', function () {
+                    //先把所有的current类去掉
+                    for (var i = 0; i < ol.children.length; i++) {
+                        ol.children[i].className = '';
+                    }
+                    //给点击的li添加current
+                    this.className = 'current';
+                    //得到点击的li的索引号
+                    var idx = this.getAttribute('index');
+                    //赋给index
+                    index = idx;
+                    //再给ul的li添加show
+                    for (var i = 0; i < ul.children.length; i++) {
+                        ul.children[i].className = '';
+                    }
+                    ul.children[index].className = 'show';
+                })
+            }
+            //设置初始显示的圆点
+            ol.children[0].className = 'current';
+            //封装一个函数
+            function out() {
+                for (var i = 0; i < ul.children.length; i++) {
+                    ul.children[i].className = '';
+                }
+
+                ul.children[index].className = 'show';
+                for (var i = 0; i < ol.children.length; i++) {
+                    ol.children[i].className = '';
+                }
+                ol.children[index].className = 'current';
+            }
+            //下一张图片
+            rt.addEventListener('click', function () {
+                if (index < ul.children.length - 1) {
+                    index++;
+                } else {
+                    index = 0;
+                }
+                out();
+
+            })
+            lt.addEventListener('click', function () {
+                if (index == 0) {
+                    index = ul.children.length - 1;
+                } else {
+                    index--;
+                }
+                out();
+            })
+            //添加一个定时器
+            var timer = setInterval(function () {
+                rt.click();
+            }, 2000)
+            //鼠标放上
+            ul.addEventListener('mouseenter', function () {
+                clearInterval(timer);
+            })
+            //鼠标离开
+            ul.addEventListener('mouseleave', function () {
+                clearInterval(timer);
+                timer = setInterval(function () {
+                rt.click();
+            }, 2000)
+            })
+            
+            lt.addEventListener('mouseenter', function () {
+                clearInterval(timer);
+            })
+            lt.addEventListener('mouseleave', function () {
+                clearInterval(timer);
+                timer = setInterval(function () {
+                rt.click();
+            }, 2000)
+            })
+            
+            rt.addEventListener('mouseenter', function () {
+                clearInterval(timer);
+            })
+            rt.addEventListener('mouseleave', function () {
+                clearInterval(timer);
+                timer = setInterval(function () {
+                rt.click();
+            }, 2000)
+            })
+        })
+    </script>
+</body>
+
+</html>
